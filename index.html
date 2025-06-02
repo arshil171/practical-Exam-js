@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #main{
+            padding-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <input id="text" type="text" placeholder="Enter you">
+    <button id="btn">Add Task</button>
+    <div id="main"></div>
+    <script>
+         let todolist = JSON.parse(localStorage.getItem("taskData")) || []
+         let btn = document.querySelector("#btn")
+         let container = document.querySelector("#main")
+         let text = document.querySelector("#text")
+           
+         btn.addEventListener("click" ,()=>{
+           if(!text.value.trim()){
+            alert("please enter a task")
+            return
+           }
+           todolist.push(text.value)
+          localStorage.setItem("taskData" , JSON.stringify(todolist))
+          
+           console.log(todolist)
+            showdata()
+            text.value = ""
+         })
+        function showdata(){
+           
+           
+                container.innerHTML =""
+                todolist.forEach((todo , index)=>{
+                    let card =document.createElement("div")
+                    let paragraph = document.createElement("p")
+                    let editbtn = document.createElement("button")
+                    let dltbtn= document.createElement("button")
+                    
+                
+                    editbtn.innerHTML = "edit"
+                    dltbtn.textContent = "delete"
+
+                    editbtn.addEventListener("click" , ()=>{
+                        let newtask = prompt("enter your task" , todo)
+                        console.log(newtask)
+                        todolist[index]= newtask ;
+                         localStorage.setItem("taskData" , JSON.stringify(todolist))
+                        showdata()
+                    })
+                    
+
+                    dltbtn.addEventListener("click" , ()=>{
+                        todolist = todolist.filter((todo , i)=>i!=index)
+                  
+                        console.log(index)
+                        console.log(todo)
+                         localStorage.setItem("taskData" , JSON.stringify(todolist))
+                        showdata()
+                    })
+                    paragraph.innerText = todo
+                    card.append(paragraph , editbtn , dltbtn)
+                    container.append(card)
+                })
+            }
+        
+        
+      window.addEventListener("load" , showdata())
+    </script>
+</body>
+</html>
