@@ -1,76 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        #main{
-            padding-top: 40px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Management</title>
+  <style>
+    #main {
+      padding-top: 20px;
+    }
+    img {
+      width: 100px;
+      display: block;
+      margin-top: 10px;
+    }
+    .card {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 15px;
+    }
+    .filters {
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-    <input id="text" type="text" placeholder="Enter you">
-    <button id="btn">Add Task</button>
-    <div id="main"></div>
-    <script>
-         let todolist = JSON.parse(localStorage.getItem("taskData")) || []
-         let btn = document.querySelector("#btn")
-         let container = document.querySelector("#main")
-         let text = document.querySelector("#text")
-           
-         btn.addEventListener("click" ,()=>{
-           if(!text.value.trim()){
-            alert("please enter a task")
-            return
-           }
-           todolist.push(text.value)
-          localStorage.setItem("taskData" , JSON.stringify(todolist))
-          
-           console.log(todolist)
-            showdata()
-            text.value = ""
-         })
-        function showdata(){
-           
-           
-                container.innerHTML =""
-                todolist.forEach((todo , index)=>{
-                    let card =document.createElement("div")
-                    let paragraph = document.createElement("p")
-                    let editbtn = document.createElement("button")
-                    let dltbtn= document.createElement("button")
-                    
-                
-                    editbtn.innerHTML = "edit"
-                    dltbtn.textContent = "delete"
+  <h1>Product Management</h1>
 
-                    editbtn.addEventListener("click" , ()=>{
-                        let newtask = prompt("enter your task" , todo)
-                        console.log(newtask)
-                        todolist[index]= newtask ;
-                         localStorage.setItem("taskData" , JSON.stringify(todolist))
-                        showdata()
-                    })
-                    
+  <form id="productform">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required>
 
-                    dltbtn.addEventListener("click" , ()=>{
-                        todolist = todolist.filter((todo , i)=>i!=index)
-                  
-                        console.log(index)
-                        console.log(todo)
-                         localStorage.setItem("taskData" , JSON.stringify(todolist))
-                        showdata()
-                    })
-                    paragraph.innerText = todo
-                    card.append(paragraph , editbtn , dltbtn)
-                    container.append(card)
-                })
-            }
-        
-        
-      window.addEventListener("load" , showdata())
-    </script>
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" required>
+
+    <label for="image">Image URL:</label>
+    <input type="url" id="image" name="image" required>
+
+    <label for="category">Category:</label>
+    <select name="category" id="category">
+      <option value="electronics">Electronics</option>
+      <option value="clothing">Clothing</option>
+      <option value="books">Books</option>
+      <option value="furniture">Furniture</option>
+    </select>
+
+    <button type="button" id="btn">Add Product</button>
+  </form>
+
+  <div class="filters">
+    <input type="text" id="search" placeholder="Search by title">
+    <select id="sort">
+      <option value="">Sort by Price</option>
+      <option value="low">Low to High</option>
+      <option value="high">High to Low</option>
+    </select>
+    <select id="filterCategory">
+      <option value="">Filter by Category</option>
+      <option value="electronics">Electronics</option>
+      <option value="clothing">Clothing</option>
+      <option value="books">Books</option>
+      <option value="furniture">Furniture</option>
+    </select>
+  </div>
+
+  <h2>Product List</h2>
+  <div id="main"></div>
+
+  <script>
+    let todolist= JSON.parse(localStorage.getItem("taskData")) || [];
+
+    const titleInput = document.getElementById("title");
+    const priceInput = document.getElementById("price");
+    const imageInput = document.getElementById("image");
+    const categoryInput = document.getElementById("category");
+    const container = document.getElementById("main");
+    const addBtn = document.getElementById("btn");
+
+    const searchInput = document.getElementById("search");
+    const sortSelect = document.getElementById("sort");
+    const filterCategory = document.getElementById("filterCategory");
+
+    addBtn.addEventListener("click", addProduct);
+    searchInput.addEventListener("input", addProductToList);
+    sortSelect.addEventListener("change", addProductToList);
+    filterCategory.addEventListener("change", addProductToList);
+
+    function addProduct() {
+      if (!titleInput.value.trim()) {
+        alert("Please enter a product title");
+        return;
+      }
+
+      if (!priceInput.value.trim()) {
+        alert("Please enter a price");
+        return;
+      }
+
+      const product = {      // create product object
+        title: titleInput.value.trim(),
+        price: parseFloat(priceInput.value.trim()), //parsefloat is used for convert in floating point number if use "abc123"  output will be Nan
+        image: imageInput.value.trim(),
+        category: categoryInput.value
+      };
+ 
+      todolist.push(product);   // push object into 
+      localStorage.setItem("taskData", JSON.stringify(todolist));
+
+      titleInput.value = ""; //It is used for after Enter value it automatically empty 
+      priceInput.value = "";
+      imageInput.value = "";
+      categoryInput.value = "electronics"; // by default set on electronics
+
+      addProductToList();
+    }
+
+    function addProductToList() {
+      container.innerHTML = "";
+
+      let filteredList = [...todolist];
+
+    
+      const searchProduct = searchInput.value.toLowerCase();
+      if (searchProduct) {
+        filteredList = filteredList.filter(product =>
+          product.title.toLowerCase().includes(searchProduct)
+        );
+      }
+
+      const selectCategory = filterCategory.value;
+      if (selectCategory) {
+        filteredList = filteredList.filter(product =>
+          product.category === selectCategory
+        );
+      }
+
+    
+      const sortType = sortSelect.value;
+      if (sortType === "low") {
+        filteredList.sort((a, b) => a.price - b.price);
+      } else if (sortType === "high") {
+        filteredList.sort((a, b) => b.price - a.price);
+      }
+
+      filteredList.forEach((product, index) => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+          <strong>Title:</strong> ${product.title}<br>
+          <strong>Price:</strong> ₹${product.price}<br>
+          <img src="${product.image}" alt="Product Image"><br>
+          <strong>Category:</strong> ${product.category}<br>
+        `;
+
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "Edit";
+        editBtn.addEventListener("click", () => {
+          const newTitle = prompt("Edit Title", product.title);
+          if (newTitle !== null && newTitle.trim() !== "") {
+            todolist[index].title = newTitle.trim();
+            localStorage.setItem("taskData", JSON.stringify(todolist));
+            addProductToList();
+          }
+        });
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        deleteBtn.addEventListener("click", () => {
+          todolist = todolist.filter((product , i)=>i!=index)
+          localStorage.setItem("taskData", JSON.stringify(todolist));
+          addProductToList();
+        });
+
+        card.appendChild(editBtn);
+        card.appendChild(deleteBtn);
+        container.appendChild(card);
+      });
+    }
+
+    window.addEventListener("load", addProductToList);
+  </script>
 </body>
 </html>
