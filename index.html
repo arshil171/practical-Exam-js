@@ -67,7 +67,7 @@
   </div>
 </div>
   <h2 id="head">Product List</h2>
-  <div id="main"></div>
+  <div id="m-main"><div id="main"></div></div>
 
   <script>
     let todolist= JSON.parse(localStorage.getItem("taskData")) || [];
@@ -77,6 +77,11 @@
     const imageInput = document.getElementById("image");
     const categoryInput = document.getElementById("category");
     const container = document.getElementById("main");
+   
+    container.style.width = "100%"
+    container.style.display = "flex"
+    container.style.justifyContent = "space-between"
+    container.style.flexWrap = "wrap"
     const addBtn = document.getElementById("btn");
 
     const searchInput = document.getElementById("search");
@@ -147,17 +152,32 @@
 
       filteredList.forEach((product, index) => {
         const card = document.createElement("div");
+        card.style.border= "1px solid black"
+        
+         card.style.width = "250px"
+        
+          card.style.borderRadius = "12px"
         card.className = "card";
-
+           
         card.innerHTML = `
-          <strong>Title:</strong> ${product.title}<br>
-          <strong>Price:</strong> ₹${product.price}<br>
-          <img src="${product.image}" alt="Product Image"><br>
-          <strong>Category:</strong> ${product.category}<br>
+          <div id="title1"><strong >Title:</strong> ${product.title}</div><br>
+          <div id="title1"><strong>Price:</strong> ₹${product.price}<br></div>
+           <div id="title1"><img id="img" src="${product.image}" alt="Product Image" ><br></div>
+          <div id="title1"><strong>Category:</strong> ${product.category}<br></div>
         `;
 
         const editBtn = document.createElement("button");
         editBtn.textContent = "Edit";
+         editBtn.style.backgroundColor = "rgb(0, 255, 191)"
+        editBtn.style.color = "#000"
+        editBtn.style.width = "80px"
+        editBtn.style.height = "30px"
+        editBtn.style.border = "none"
+        editBtn.style.borderRadius = "4px"
+        editBtn.style.marginTop = "10px"
+        editBtn.style.marginLeft = "10px"
+        
+      
         editBtn.addEventListener("click", () => {
           const newTitle = prompt("Edit Title", product.title);
           if (newTitle !== null && newTitle.trim() !== "") {
@@ -169,7 +189,16 @@
 
         const deleteBtn = document.createElement("button");
         deleteBtn.textContent = "Delete";
-        deleteBtn.style
+        deleteBtn.style.backgroundColor = "red"
+        deleteBtn.style.color = "#fff"
+        deleteBtn.style.width = "80px"
+        deleteBtn.style.height = "30px"
+        deleteBtn.style.border = "none"
+        deleteBtn.style.borderRadius = "4px"
+       deleteBtn.style.marginTop = "10px"
+         deleteBtn.style.marginLeft = "50px"
+
+
         deleteBtn.addEventListener("click", () => {
           todolist = todolist.filter((product , i)=>i!=index)
           localStorage.setItem("taskData", JSON.stringify(todolist));
