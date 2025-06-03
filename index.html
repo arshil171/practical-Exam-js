@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Product Management</title>
+  <link rel="stylesheet" href="./style.css">
   <style>
     #main {
       padding-top: 20px;
@@ -25,29 +26,31 @@
 </head>
 <body>
   <h1>Product Management</h1>
-
+<div id="main-2">
   <form id="productform">
-    <label for="title">Title:</label>
-    <input type="text" id="title" name="title" required>
+   
+    <input type="text" id="title" name="title" required placeholder="Enter Your Product Name">
 
-    <label for="price">Price:</label>
-    <input type="number" id="price" name="price" required>
+   
+    <input type="number" id="price" name="price" required placeholder="Enter Your Product Price">
 
-    <label for="image">Image URL:</label>
-    <input type="url" id="image" name="image" required>
-
-    <label for="category">Category:</label>
+ 
+    <input type="url" id="image" name="image" required placeholder="Enter Your Product Image URL">
+    <div id="select">
+    <label for="category">Category :- </label>
     <select name="category" id="category">
       <option value="electronics">Electronics</option>
       <option value="clothing">Clothing</option>
       <option value="books">Books</option>
       <option value="furniture">Furniture</option>
     </select>
+    </div>
 
     <button type="button" id="btn">Add Product</button>
   </form>
 
-  <div class="filters">
+  <div class="filter">
+    <h2>Search Box</h2>
     <input type="text" id="search" placeholder="Search by title">
     <select id="sort">
       <option value="">Sort by Price</option>
@@ -62,8 +65,8 @@
       <option value="furniture">Furniture</option>
     </select>
   </div>
-
-  <h2>Product List</h2>
+</div>
+  <h2 id="head">Product List</h2>
   <div id="main"></div>
 
   <script>
@@ -166,6 +169,7 @@
 
         const deleteBtn = document.createElement("button");
         deleteBtn.textContent = "Delete";
+        deleteBtn.style
         deleteBtn.addEventListener("click", () => {
           todolist = todolist.filter((product , i)=>i!=index)
           localStorage.setItem("taskData", JSON.stringify(todolist));
