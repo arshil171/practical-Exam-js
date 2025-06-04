@@ -88,10 +88,10 @@
     const sortSelect = document.getElementById("sort");
     const filterCategory = document.getElementById("filterCategory");
 
-    addBtn.addEventListener("click", addProduct);
-    searchInput.addEventListener("input", addProductToList);
-    sortSelect.addEventListener("change", addProductToList);
-    filterCategory.addEventListener("change", addProductToList);
+    addBtn.addEventListener("click", addProduct());
+    searchInput.addEventListener("input", addProductToList());
+    sortSelect.addEventListener("change", addProductToList());
+    filterCategory.addEventListener("change", addProductToList());
 
     function addProduct() {
       if (!titleInput.value.trim()) {
