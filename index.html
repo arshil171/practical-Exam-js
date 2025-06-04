@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Product Management</title>
   <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     #main {
       padding-top: 20px;
@@ -48,10 +49,12 @@
 
     <button type="button" id="btn">Add Product</button>
   </form>
+  </div>
+   <h2 id="head">Product List</h2>
 
   <div class="filter">
-    <h2>Search Box</h2>
-    <input type="text" id="search" placeholder="Search by title">
+   
+    <div id="input-1"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="search" placeholder="Search by title"  ></div>
     <select id="sort">
       <option value="">Sort by Price</option>
       <option value="low">Low to High</option>
@@ -65,8 +68,8 @@
       <option value="furniture">Furniture</option>
     </select>
   </div>
-</div>
-  <h2 id="head">Product List</h2>
+
+ 
   <div id="m-main"><div id="main"></div></div>
 
   <script>
@@ -80,18 +83,20 @@
    
     container.style.width = "100%"
     container.style.display = "flex"
-    container.style.justifyContent = "space-between"
+    container.style.marginLeft = "70px"
     container.style.flexWrap = "wrap"
+    container.style.marginTop = "40px"
+ 
     const addBtn = document.getElementById("btn");
 
     const searchInput = document.getElementById("search");
     const sortSelect = document.getElementById("sort");
     const filterCategory = document.getElementById("filterCategory");
 
-    addBtn.addEventListener("click", addProduct());
-    searchInput.addEventListener("input", addProductToList());
-    sortSelect.addEventListener("change", addProductToList());
-    filterCategory.addEventListener("change", addProductToList());
+    addBtn.addEventListener("click", addProduct);
+    searchInput.addEventListener("input", addProductToList);
+    sortSelect.addEventListener("change", addProductToList);
+    filterCategory.addEventListener("change", addProductToList);
 
     function addProduct() {
       if (!titleInput.value.trim()) {
@@ -155,6 +160,7 @@
         card.style.border= "1px solid black"
         
          card.style.width = "250px"
+         card.style.marginLeft = "40px"
         
           card.style.borderRadius = "12px"
         card.className = "card";
